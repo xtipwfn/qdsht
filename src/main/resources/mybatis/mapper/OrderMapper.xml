@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ryx.mapper.OrderMapper">
+    <select id="queryOrders" resultType="com.ryx.model.Order">
+        select    SQ_UUID,NSRSBH,GSMC,FR_XM,FR_PHONE,FR_SFZJHM,SJFKJE,PROD_UUID,PROD_NAME,QDS_UUID,
+        QDS_MC,SQZT,SQRQ,LRRY,XGSJ,XGRY,OPENID,BZ,LX,QDS,f_get_dmtomc('贷款申请状态',sqzt) as sqztmc
+        from t_qds_dksqb t where t.qds= #{qds}
+        <if test="order.gsmc!=null">
+            and t.gsmc like CONCAT(CONCAT('%', #{order.gsmc}), '%')
+        </if>
+        <if test="order.prodUuid!=null">
+            and t.prod_uuid =#{order.prodUuid}
+        </if>
+        <if test="order.prodUuid!=null">
+            and t.prod_uuid =#{order.prodUuid}
+        </if>
+        <if test="order.qdsMc!=null">
+            and t.qds_mc like CONCAT(CONCAT('%', #{order.qdsMc}), '%')
+        </if>
+        <if test="order.sqzt!=null">
+            and t.sqzt =#{order.sqzt}
+        </if>
+        <if test="order.lx!=null">
+            and t.lx =#{order.lx}
+        </if>
+        <if test="order.frPhone!=null">
+            and t.fr_Phone like CONCAT(CONCAT('%', #{order.frPhone}), '%')
+        </if>
+        <if test="order.frXm!=null">
+            and t.fr_xm like CONCAT(CONCAT('%', #{order.frXm}), '%')
+        </if>
+        <if test="order.sqrqq!=null">
+            and t.sqrq &gt;= to_date(#{order.sqrqq},'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="order.sqrqz!=null">
+            and t.sqrq &lt; to_date(#{order.sqrqz},'yyyy-mm-dd hh24:mi:ss')+1
+        </if>
+        order by sqrq desc,sq_uuid
+    </select>
+</mapper>

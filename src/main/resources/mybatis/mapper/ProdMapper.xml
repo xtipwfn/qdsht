@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ryx.mapper.ProdMapper">
+  <resultMap id="ProdResultMap" type="com.ryx.model.Prod">
+    <id column="PROD_UUID" jdbcType="VARCHAR" property="prodUuid" />
+    <result column="PROD_NAME" jdbcType="VARCHAR" property="prodName" />
+    <result column="PROD_ZT" jdbcType="VARCHAR" property="prodZt" />
+    <result column="PROD_SM" jdbcType="VARCHAR" property="prodSm" />
+    <result column="PROD_TJ" jdbcType="VARCHAR" property="prodTj" />
+    <result column="PROD_TD" jdbcType="VARCHAR" property="prodTd" />
+    <result column="PROD_SXZL" jdbcType="VARCHAR" property="prodSxzl" />
+    <result column="PROD_FL" jdbcType="VARCHAR" property="prodFl" />
+    <result column="MAX_JE" jdbcType="VARCHAR" property="maxJe" />
+    <result column="JJED" jdbcType="VARCHAR" property="jjed" />
+    <result column="CGFKS" jdbcType="VARCHAR" property="cgfks" />
+    <result column="ZKFKSJ" jdbcType="VARCHAR" property="zkfksj" />
+    <result column="DKQS" jdbcType="VARCHAR" property="dkqs" />
+    <result column="DKLL" jdbcType="VARCHAR" property="dkll" />
+    <result column="HKFS" jdbcType="VARCHAR" property="hkfs" />
+    <result column="DQ" jdbcType="VARCHAR" property="dq" />
+    <result column="BYFY" jdbcType="VARCHAR" property="byfy" />
+    <result column="HJFY" jdbcType="VARCHAR" property="hjfy" />
+    <result column="ZSFY" jdbcType="VARCHAR" property="zsfy" />
+    <result column="JSZQ" jdbcType="VARCHAR" property="jszq" />
+    <result column="JSTJ" jdbcType="VARCHAR" property="jstj" />
+    <result column="JSSM" jdbcType="VARCHAR" property="jssm" />
+    <result column="LC_PDF" jdbcType="VARCHAR" property="lcPdf" />
+    <result column="BANK_URL" jdbcType="VARCHAR" property="bankUrl" />
+    <result column="TGHB_URL" jdbcType="VARCHAR" property="tghbUrl" />
+    <result column="XH" jdbcType="DECIMAL" property="xh" />
+    <result column="LOGO_URL" jdbcType="VARCHAR" property="logoUrl" />
+    <result column="LRSJ" jdbcType="TIMESTAMP" property="lrsj" />
+    <result column="LRRY" jdbcType="VARCHAR" property="lrry" />
+    <result column="XGSJ" jdbcType="TIMESTAMP" property="xgsj" />
+    <result column="XGRY" jdbcType="VARCHAR" property="xgry" />
+    <result column="YGMYHK" jdbcType="VARCHAR" property="ygmyhk" />
+    <result column="TKM_URL" jdbcType="VARCHAR" property="tkmUrl" />
+    <result column="KF_BZ" jdbcType="VARCHAR" property="kfBz" />
+    <result column="KF_URL" jdbcType="VARCHAR" property="kfUrl" />
+    <result column="PROD_LCSM" jdbcType="VARCHAR" property="prodLcsm" />
+    <result column="RMBZ" jdbcType="VARCHAR" property="rmbz" />
+    <result column="QDS" jdbcType="VARCHAR" property="qds" />
+  </resultMap>
+    <select id="queryProdListByProdName" resultMap="ProdResultMap">
+        select prod_uuid, prod_name, prod_zt, prod_sm, prod_tj,
+        prod_td, prod_sxzl, prod_fl, max_je, jjed, cgfks, zkfksj,
+        dkqs, dkll, hkfs, dq, byfy, hjfy, zsfy, jszq, jstj, jssm,
+        lc_pdf, bank_url, tghb_url, xh, logo_url, lrsj, lrry, xgsj,
+        xgry, ygmyhk, tkm_url, kf_bz, kf_url, prod_lcsm, rmbz, qds
+        from T_QDS_PROD t
+        where t.prod_zt = 'Y'
+        <if test="prodName!=null">
+            and t.prod_name like CONCAT(CONCAT('%', #{prodName}), '%')
+        </if>
+        <if test="userUuid!=null">
+            and exists (select 1 from t_qds_user u where u.user_uuid= #{userUuid} and u.qds=t.qds)
+        </if>
+        order by xh
+    </select>
+
+    <update id="updateProd" parameterType="com.ryx.model.Prod">
+        update T_QDS_PROD t
+        <set>
+            <if test="prodName != null">
+                prod_name = #{prodName,jdbcType=VARCHAR},
+            </if>
+            <if test="prodZt != null">
+                prod_zt = #{prodZt,jdbcType=VARCHAR},
+            </if>
+            <if test="prodSm != null">
+                prod_sm = #{prodSm,jdbcType=VARCHAR},
+            </if>
+            <if test="prodTj != null">
+                prod_tj = #{prodTj,jdbcType=VARCHAR},
+            </if>
+            <if test="prodTd != null">
+                prod_td = #{prodTd,jdbcType=VARCHAR},
+            </if>
+            <if test="prodSxzl != null">
+                prod_sxzl = #{prodSxzl,jdbcType=VARCHAR},
+            </if>
+            <if test="prodFl != null">
+                prod_fl = #{prodFl,jdbcType=VARCHAR},
+            </if>
+            <if test="maxJe != null">
+                max_je = #{maxJe,jdbcType=VARCHAR},
+            </if>
+            <if test="jjed != null">
+                jjed = #{jjed,jdbcType=VARCHAR},
+            </if>
+            <if test="cgfks != null">
+                cgfks = #{cgfks,jdbcType=VARCHAR},
+            </if>
+            <if test="zkfksj != null">
+                zkfksj = #{zkfksj,jdbcType=VARCHAR},
+            </if>
+            <if test="dkqs != null">
+                dkqs = #{dkqs,jdbcType=VARCHAR},
+            </if>
+            <if test="dkll != null">
+                dkll = #{dkll,jdbcType=VARCHAR},
+            </if>
+            <if test="hkfs != null">
+                hkfs = #{hkfs,jdbcType=VARCHAR},
+            </if>
+            <if test="dq != null">
+                dq = #{dq,jdbcType=VARCHAR},
+            </if>
+            <if test="byfy != null">
+                byfy = #{byfy,jdbcType=VARCHAR},
+            </if>
+            <if test="hjfy != null">
+                hjfy = #{hjfy,jdbcType=VARCHAR},
+            </if>
+            <if test="zsfy != null">
+                zsfy = #{zsfy,jdbcType=VARCHAR},
+            </if>
+            <if test="jszq != null">
+                jszq = #{jszq,jdbcType=VARCHAR},
+            </if>
+            <if test="jstj != null">
+                jstj = #{jstj,jdbcType=VARCHAR},
+            </if>
+            <if test="jssm != null">
+                jssm = #{jssm,jdbcType=VARCHAR},
+            </if>
+            <if test="lcPdf != null">
+                lc_pdf = #{lcPdf,jdbcType=VARCHAR},
+            </if>
+            <if test="bankUrl != null">
+                bank_url = #{bankUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="tghbUrl != null">
+                tghb_url = #{tghbUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="xh != null">
+                xh = #{xh,jdbcType=VARCHAR},
+            </if>
+            <if test="logoUrl != null">
+                logo_url = #{logoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="ygmyhk != null">
+                ygmyhk = #{ygmyhk,jdbcType=VARCHAR},
+            </if>
+            <if test="tkmUrl != null">
+                tkm_url = #{tkmUrl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where prod_uuid = #{prodUuid,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertProd" parameterType="com.ryx.model.Prod">
+        insert into T_QDS_PROD
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            prod_uuid,
+            qds,
+            lrsj,
+            <if test="prod.prodName != null">
+                prod_name ,
+            </if>
+            <if test="prod.prodZt != null">
+                prod_zt ,
+            </if>
+            <if test="prod.prodSm != null">
+                prod_sm ,
+            </if>
+            <if test="prod.prodTj != null">
+                prod_tj ,
+            </if>
+            <if test="prod.prodTd != null">
+                prod_td ,
+            </if>
+            <if test="prod.prodSxzl != null">
+                prod_sxzl ,
+            </if>
+            <if test="prod.prodFl != null">
+                prod_fl ,
+            </if>
+            <if test="prod.maxJe != null">
+                max_je ,
+            </if>
+            <if test="prod.jjed != null">
+                jjed ,
+            </if>
+            <if test="prod.cgfks != null">
+                cgfks ,
+            </if>
+            <if test="prod.zkfksj != null">
+                zkfksj,
+            </if>
+            <if test="prod.dkqs != null">
+                dkqs ,
+            </if>
+            <if test="prod.dkll != null">
+                dkll ,
+            </if>
+            <if test="prod.hkfs != null">
+                hkfs ,
+            </if>
+            <if test="prod.dq != null">
+                dq ,
+            </if>
+            <if test="prod.byfy != null">
+                byfy ,
+            </if>
+            <if test="prod.hjfy != null">
+                hjfy ,
+            </if>
+            <if test="prod.zsfy != null">
+                zsfy ,
+            </if>
+            <if test="prod.jszq != null">
+                jszq ,
+            </if>
+            <if test="prod.jstj != null">
+                jstj ,
+            </if>
+            <if test="prod.jssm != null">
+                jssm ,
+            </if>
+            <if test="prod.lcPdf != null">
+                lc_pdf ,
+            </if>
+            <if test="prod.bankUrl != null">
+                bank_url ,
+            </if>
+            <if test="prod.tghbUrl != null">
+                tghb_url ,
+            </if>
+            <if test="prod.xh != null">
+                xh ,
+            </if>
+            <if test="prod.logoUrl != null">
+                logo_url ,
+            </if>
+            <if test="prod.ygmyhk != null">
+                ygmyhk ,
+            </if>
+            <if test="prod.tkmUrl != null">
+                tkm_url ,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            sys_guid(),
+            #{qds,jdbcType=VARCHAR},
+            sysdate,
+            <if test="prod.prodName != null">
+                #{prod.prodName,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.prodZt != null">
+                #{prod.prodZt,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.prodSm != null">
+                #{prod.prodSm,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.prodTj != null">
+                #{prod.prodTj,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.prodTd != null">
+                #{prod.prodTd,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.prodSxzl != null">
+                #{prod.prodSxzl,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.prodFl != null">
+                #{prod.prodFl,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.maxJe != null">
+                #{prod.maxJe,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.jjed != null">
+                #{prod.jjed,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.cgfks != null">
+                #{prod.cgfks,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.zkfksj != null">
+                #{prod.zkfksj,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.dkqs != null">
+               #{prod.dkqs,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.dkll != null">
+                #{prod.dkll,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.hkfs != null">
+               #{prod.hkfs,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.dq != null">
+               #{prod.dq,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.byfy != null">
+                #{prod.byfy,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.hjfy != null">
+                #{prod.hjfy,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.zsfy != null">
+                #{prod.zsfy,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.jszq != null">
+                #{prod.jszq,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.jstj != null">
+                #{prod.jstj,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.jssm != null">
+                #{prod.jssm,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.lcPdf != null">
+                #{prod.lcPdf,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.bankUrl != null">
+                #{prod.bankUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.tghbUrl != null">
+                #{prod.tghbUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.xh != null">
+                #{prod.xh,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.logoUrl != null">
+                #{prod.logoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.ygmyhk != null">
+                #{prod.ygmyhk,jdbcType=VARCHAR},
+            </if>
+            <if test="prod.tkmUrl != null">
+                #{prod.tkmUrl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

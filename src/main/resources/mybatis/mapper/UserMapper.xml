@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ryx.mapper.UserMapper">
+    <resultMap id="UserResultMap" type="com.ryx.model.User">
+        <id column="USER_UUID" jdbcType="VARCHAR" property="userUuid"/>
+        <result column="XM" jdbcType="VARCHAR" property="xm"/>
+        <result column="PHONE" jdbcType="VARCHAR" property="phone"/>
+        <result column="PWD" jdbcType="VARCHAR" property="pwd"/>
+        <result column="USER_TYPE" jdbcType="VARCHAR" property="userType"/>
+        <result column="SFZJHM" jdbcType="VARCHAR" property="sfzjhm"/>
+        <result column="ZFBZH" jdbcType="VARCHAR" property="zfbzh"/>
+        <result column="SJ_USER_UUID" jdbcType="VARCHAR" property="sjUserUuid"/>
+        <result column="SJ_XM" jdbcType="VARCHAR" property="sjXm"/>
+        <result column="ZW" jdbcType="VARCHAR" property="zw"/>
+        <result column="OPENID" jdbcType="VARCHAR" property="openid"/>
+        <result column="LRSJ" jdbcType="TIMESTAMP" property="lrsj"/>
+        <result column="LRRY" jdbcType="VARCHAR" property="lrry"/>
+        <result column="XGSJ" jdbcType="TIMESTAMP" property="xgsj"/>
+        <result column="XGRY" jdbcType="VARCHAR" property="xgry"/>
+        <result column="YXBZ" jdbcType="VARCHAR" property="yxbz"/>
+        <result column="JS_TYPE" jdbcType="VARCHAR" property="jsType"/>
+        <result column="HEAD_URL" jdbcType="VARCHAR" property="headUrl"/>
+        <result column="QDS" jdbcType="VARCHAR" property="qds"/>
+        <result column="SSQDID" jdbcType="VARCHAR" property="ssqdid"/>
+    </resultMap>
+
+    <resultMap id="UserPermissionResultMap" type="com.ryx.model.UserPermission">
+        <id column="USER_UUID" jdbcType="VARCHAR" property="userUuid"/>
+        <result column="menu_name" jdbcType="VARCHAR" property="menuName"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="sj_menu_uuid" jdbcType="VARCHAR" property="sjMenuUuid"/>
+        <result column="user_uuid" jdbcType="VARCHAR" property="userUuid"/>
+    </resultMap>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="UserResultMap">
+        select user_uuid ,xm , phone , pwd , user_type , sfzjhm ,
+        zfbzh , sj_user_uuid , sj_xm , zw , openid , lrsj , lrry ,
+        xgsj , xgry , yxbz , js_type , head_url , qds , ssqdid
+        from T_QDS_USER
+        where USER_UUID = #{userUuid}
+    </select>
+
+    <select id="queryUser" resultType="com.ryx.model.User">
+        SELECT user_uuid ,xm , phone , pwd , user_type , sfzjhm ,
+        zfbzh , sj_user_uuid , sj_xm , zw , openid , lrsj , lrry ,
+        xgsj , xgry , yxbz , js_type , head_url , qds , ssqdid
+        FROM T_QDS_USER t WHERE t.phone=#{phone} and t.pwd=#{password}
+    </select>
+
+    <select id="getPermissionList" resultMap="UserPermissionResultMap">
+        select m.menu_uuid,m.menu_name,m.url,m.img,m.sj_menu_uuid,t.USER_UUID
+        from t_qds_user t ,c##db_rongyixin.t_ryx_menu m,t_qds_user_menu mu
+        where t.user_uuid=mu.user_uuid and m.menu_uuid=mu.menu_uuid and t.yxbz='Y' and mu.yxbz='Y' and
+        t.user_uuid=#{userUuid} order by m.xh
+    </select>
+
+    <select id="querySubordinateUsers" resultType="com.ryx.model.User">
+        SELECT user_uuid ,xm , phone , pwd , user_type , sfzjhm ,
+        zfbzh , sj_user_uuid , sj_xm , zw , openid , lrsj , lrry ,
+        xgsj , xgry , yxbz , js_type , head_url , qds , ssqdid
+        FROM T_QDS_USER t WHERE  sj_user_UUID = #{userUuid}
+        <if test="phone!=null">
+            and t.phone like CONCAT(CONCAT('%', #{phone}), '%')
+        </if>
+        <if test="xm!=null">
+            union
+            SELECT user_uuid ,xm , phone , pwd , user_type , sfzjhm ,
+            zfbzh , sj_user_uuid , sj_xm , zw , openid , lrsj , lrry ,
+            xgsj , xgry , yxbz , js_type , head_url , qds , ssqdid
+            FROM T_QDS_USER u WHERE  sj_user_UUID = #{userUuid}
+            and u.xm like CONCAT(CONCAT('%', #{xm}), '%')
+        </if>
+    </select>
+    <update id="updateUser" parameterType="com.ryx.model.User">
+        update T_QDS_USER
+        <set>
+            <if test="xm != null">
+                xm = #{xm,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="pwd != null">
+                pwd  = #{pwd,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                user_type = #{userType,jdbcType=VARCHAR},
+            </if>
+            <if test="sfzjhm != null">
+                sfzjhm  = #{sfzjhm,jdbcType=VARCHAR},
+            </if>
+            <if test="zfbzh != null">
+                zfbzh = #{zfbzh,jdbcType=VARCHAR},
+            </if>
+            <if test="sjUserUuid != null">
+                sj_user_uuid = #{sjUserUuid,jdbcType=VARCHAR},
+            </if>
+            <if test="sjXm != null">
+                sj_xm = #{sjXm,jdbcType=VARCHAR},
+            </if>
+            <if test="zw != null">
+                zw = #{zw,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where user_Uuid = #{userUuid,jdbcType=VARCHAR}
+    </update>
+</mapper>

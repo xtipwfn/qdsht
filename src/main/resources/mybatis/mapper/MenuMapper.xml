@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ryx.mapper.MenuMapper">
+    <select id="queryMenu" resultType="com.ryx.model.Menu">
+        select m.menu_uuid,m.menu_name,m.url,m.img,m.sj_menu_uuid from
+        t_qds_user t ,t_qds_menu m,t_qds_user_menu mu
+        where t.user_uuid=mu.user_uuid and m.menu_uuid=mu.menu_uuid and t.yxbz='Y' and mu.yxbz='Y'
+        and t.user_uuid=#{userUuid} order by m.xh
+    </select>
+</mapper>
